@@ -25,23 +25,57 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState("stats");
+  const [activeTab, setActiveTab] = useState("settings");
 
   useEffect(() => {
     fetch("/admin/api/save-data")
       .then((res) => res.json())
-      .then((result) => setData(result))
+      .then((result) => {
+        // ตรวจสอบและเพิ่ม settings ถ้ายังไม่มีในฐานข้อมูลเก่า
+        if (!result.settings) {
+          result.settings = { heroBackground: "" };
+        }
+        setData(result);
+      })
       .catch(() => setData(defaultData))
       .finally(() => setLoading(false));
   }, []);
 
   const handleEdit = (section: string, id: number, field: string, value: any) => {
-    setData((prev: any) => ({
-      ...prev,
-      [section]: prev[section].map((item: any) =>
-        item.id === id ? { ...item, [field]: value } : item
-      ),
-    }));
+    setData((prev: any) => {
+      // จัดการกรณีเป็น settings ซึ่งไม่ใช่ array
+      if (section === "settings") {
+        return {
+          ...prev,
+          settings: {
+            ...prev.settings,
+            [field]: value
+          }
+        };
+      }
+      
+      return {
+        ...prev,
+        [section]: prev[section].map((item: any) =>
+          item.id === id ? { ...item, [field]: value } : item
+        ),
+      };
+    });
+  };
+
+  const handleSettingImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) { // 2MB limit for background
+        alert("ขนาดไฟล์ใหญ่เกินไป กรุณาอัปโหลดรูปภาพขนาดไม่เกิน 2MB");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        handleEdit("settings", 0, "heroBackground", reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleImageUpload = (id: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -135,6 +169,7 @@ export default function AdminPage() {
         <div className="bg-white rounded-xl shadow-sm p-2 mb-6">
           <div className="flex flex-wrap gap-2">
             {[
+              { key: "settings", label: "ตั้งค่าทั่วไป" },
               { key: "stats", label: "สถิติ" },
               { key: "products", label: "สินค้า" },
               { key: "portfolio", label: "ผลงาน" },
@@ -154,6 +189,59 @@ export default function AdminPage() {
         </div>
 
         <div className="bg-white rounded-xl shadow-sm p-6">
+          {activeTab === "settings" && (
+            <div>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-bold text-foreground">ตั้งค่าทั่วไป</h2>
+              </div>
+              <div className="space-y-6">
+                <div className="p-4 border border-gray-light rounded-lg">
+                  <h3 className="font-bold text-foreground mb-4">รูปภาพพื้นหลังส่วนบนสุด (Hero Section)</h3>
+                  <div className="space-y-4">
+                    {data.settings?.heroBackground ? (
+                      <div className="relative h-48 w-full rounded-lg overflow-hidden border border-gray-light mb-4">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img 
+                          src={data.settings.heroBackground} 
+                          alt="Hero Background" 
+                          className="w-full h-full object-cover"
+                        />
+                        <button 
+                          onClick={() => handleEdit("settings", 0, "heroBackground", "")}
+                          className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 shadow-md"
+                          title="ลบรูปภาพ"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="h-48 w-full rounded-lg bg-[#0f3460] flex items-center justify-center border border-gray-light mb-4 opacity-50 relative overflow-hidden">
+                        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white to-transparent" style={{ backgroundSize: '20px 20px', backgroundImage: 'radial-gradient(circle at center, white 1px, transparent 1px)' }}></div>
+                        <span className="text-white relative z-10">ใช้พื้นหลังสีน้ำเงินเริ่มต้น</span>
+                      </div>
+                    )}
+                    
+                    <div className="space-y-2 border border-gray-light p-3 rounded-lg bg-gray-50">
+                      <label className="block text-sm font-medium text-gray-dark">อัปโหลดรูปภาพใหม่</label>
+                      <input type="text" value={data.settings?.heroBackground || ""} onChange={(e) => handleEdit("settings", 0, "heroBackground", e.target.value)} className="w-full px-3 py-2 border border-gray-light rounded-lg outline-none mb-2 bg-white" placeholder="URL รูปภาพ (หรืออัปโหลดด้านล่าง)" />
+                      <div className="text-sm text-gray-medium text-center my-2">หรือ</div>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={handleSettingImageUpload} 
+                        className="w-full text-sm text-gray-medium file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
+                      />
+                      {data.settings?.heroBackground?.startsWith('data:image') && (
+                        <p className="text-xs text-green-600 mt-1">อัปโหลดรูปภาพสำเร็จ (Base64)</p>
+                      )}
+                      <p className="text-xs text-gray-medium mt-2">คำแนะนำ: ควรใช้รูปภาพแนวนอนขนาดใหญ่ (เช่น 1920x1080) เพื่อความคมชัด</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {activeTab === "stats" && (
             <div>
               <div className="flex justify-between items-center mb-6">

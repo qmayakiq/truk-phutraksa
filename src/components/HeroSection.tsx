@@ -1,20 +1,37 @@
 import { ArrowRight, FileText } from "lucide-react";
 
-export default function HeroSection() {
+export default function HeroSection({ data }: { data?: any }) {
+  const bgImage = data?.settings?.heroBackground;
+
   return (
     <section
       id="hero"
       className="relative min-h-[90vh] flex items-center justify-center bg-primary-dark overflow-hidden pt-16 lg:pt-20"
     >
-      {/* Background overlay pattern */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-dark via-primary to-primary-light opacity-95" />
-      <div
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
-        }}
-      />
+      {/* Background Image or Pattern */}
+      {bgImage ? (
+        <>
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${bgImage})` }}
+          />
+          {/* Dark overlay to ensure text is readable on top of image */}
+          <div className="absolute inset-0 bg-primary-dark/80 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-t from-primary-dark/90 via-primary-dark/50 to-transparent" />
+        </>
+      ) : (
+        <>
+          {/* Background overlay pattern (Fallback) */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary-dark via-primary to-primary-light opacity-95" />
+          <div
+            className="absolute inset-0 opacity-10"
+            style={{
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
+            }}
+          />
+        </>
+      )}
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Badge */}
@@ -26,16 +43,16 @@ export default function HeroSection() {
         </div>
 
         {/* Heading */}
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-6">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-6 drop-shadow-lg">
           มาตรฐานงานประกอบ
           <br />
           <span className="text-accent">ระดับมืออาชีพ</span>
         </h1>
 
-        <p className="text-lg sm:text-xl text-white/80 max-w-2xl mx-auto mb-4 leading-relaxed">
+        <p className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto mb-4 leading-relaxed font-medium drop-shadow-md">
           เพื่อความทนทานและประสิทธิภาพสูงสุด
         </p>
-        <p className="text-base sm:text-lg text-white/60 max-w-3xl mx-auto mb-10 leading-relaxed">
+        <p className="text-base sm:text-lg text-white/80 max-w-3xl mx-auto mb-10 leading-relaxed drop-shadow-md">
           รับผลิตและออกแบบตัวถังรถบรรทุกขยะทุกประเภท โดยช่างผู้เชี่ยวชาญ
           <br className="hidden sm:block" />
           พร้อมบริการหลังการขายแบบครบวงจร
@@ -62,16 +79,16 @@ export default function HeroSection() {
         {/* Stats */}
         <div className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto">
           <div>
-            <div className="text-3xl sm:text-4xl font-bold text-white">500+</div>
-            <div className="text-sm text-white/60 mt-1">คันที่ส่งมอบ</div>
+            <div className="text-3xl sm:text-4xl font-bold text-white drop-shadow-md">500+</div>
+            <div className="text-sm text-white/80 mt-1 font-medium">คันที่ส่งมอบ</div>
           </div>
           <div>
-            <div className="text-3xl sm:text-4xl font-bold text-white">200+</div>
-            <div className="text-sm text-white/60 mt-1">ลูกค้าทั่วประเทศ</div>
+            <div className="text-3xl sm:text-4xl font-bold text-white drop-shadow-md">200+</div>
+            <div className="text-sm text-white/80 mt-1 font-medium">ลูกค้าทั่วประเทศ</div>
           </div>
           <div>
-            <div className="text-3xl sm:text-4xl font-bold text-white">20+</div>
-            <div className="text-sm text-white/60 mt-1">ปีแห่งประสบการณ์</div>
+            <div className="text-3xl sm:text-4xl font-bold text-white drop-shadow-md">20+</div>
+            <div className="text-sm text-white/80 mt-1 font-medium">ปีแห่งประสบการณ์</div>
           </div>
         </div>
       </div>

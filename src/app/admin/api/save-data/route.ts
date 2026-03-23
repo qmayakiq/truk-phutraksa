@@ -13,6 +13,9 @@ const getRedisClient = () => {
 };
 
 const defaultData = {
+  settings: {
+    heroBackground: "",
+  },
   stats: [
     { id: 1, label: "รถที่จำหน่าย", value: "150+" },
     { id: 2, label: "ลูกค้าทั่วประเทศ", value: "20+" },

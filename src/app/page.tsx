@@ -80,7 +80,7 @@ export default async function Home() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="flex-1">
-        <HeroSection />
+        <HeroSection data={data} />
         <WhyChooseUs />
         <ServicesSection />
         <FeaturedProducts data={data?.products} />
