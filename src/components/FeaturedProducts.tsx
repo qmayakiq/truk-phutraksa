@@ -71,15 +71,19 @@ export default function FeaturedProducts({ data }: FeaturedProductsProps) {
               key={product.id}
               className="group bg-white rounded-2xl overflow-hidden border border-gray-light hover:shadow-2xl transition-all duration-300"
             >
-              {/* Image Placeholder */}
-              <div className="relative h-56 bg-gradient-to-br from-primary/5 to-primary/10 flex items-center justify-center overflow-hidden">
-                <div className="text-center">
-                  <Truck className="w-16 h-16 text-primary/30 mx-auto mb-2" />
-                  <span className="text-xs text-gray-medium">
-                    {product.nameEn}
-                  </span>
-                </div>
-                <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors" />
+              {/* Product Image Placeholder or Real Image */}
+              <div className="aspect-w-16 aspect-h-10 bg-gradient-to-br from-primary/5 to-primary/10 relative overflow-hidden h-64">
+                {product.image ? (
+                  <img 
+                    src={product.image} 
+                    alt={product.name} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Truck className="w-20 h-20 text-primary/20 group-hover:scale-110 transition-transform duration-500" />
+                  </div>
+                )}
               </div>
 
               {/* Content */}

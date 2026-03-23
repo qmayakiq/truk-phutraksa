@@ -78,7 +78,7 @@ export default function AdminPage() {
     }
   };
 
-  const handleImageUpload = (id: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (section: string, id: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 1024 * 1024) { // 1MB limit
@@ -87,7 +87,7 @@ export default function AdminPage() {
       }
       const reader = new FileReader();
       reader.onloadend = () => {
-        handleEdit("portfolio", id, "image", reader.result);
+        handleEdit(section, id, "image", reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -288,16 +288,41 @@ export default function AdminPage() {
                   <div key={product.id} className="p-4 border border-gray-light rounded-lg">
                     {editing === `products-${product.id}` ? (
                       <div className="space-y-4">
-                        <input type="text" value={product.name} onChange={(e) => handleEdit("products", product.id, "name", e.target.value)} className="w-full px-3 py-2 border border-gray-light rounded-lg outline-none" />
-                        {product.specs.map((spec: string, i: number) => (
-                          <input key={i} type="text" value={spec} onChange={(e) => { const s = [...product.specs]; s[i] = e.target.value; handleEdit("products", product.id, "specs", s); }} className="w-full px-3 py-2 border border-gray-light rounded-lg outline-none" />
-                        ))}
-                        <input type="text" value={product.price} onChange={(e) => handleEdit("products", product.id, "price", e.target.value)} className="w-full px-3 py-2 border border-gray-light rounded-lg outline-none" />
+                        <input type="text" value={product.name} onChange={(e) => handleEdit("products", product.id, "name", e.target.value)} className="w-full px-3 py-2 border border-gray-light rounded-lg outline-none font-bold" />
+                        <textarea 
+                          value={product.specs.join('\n')} 
+                          onChange={(e) => handleEdit("products", product.id, "specs", e.target.value.split('\n'))}
+                          className="w-full px-3 py-2 border border-gray-light rounded-lg outline-none min-h-[100px]"
+                          placeholder="สเปค (บรรทัดละ 1 ข้อ)"
+                        />
+                        <input type="text" value={product.price} onChange={(e) => handleEdit("products", product.id, "price", e.target.value)} className="w-full px-3 py-2 border border-gray-light rounded-lg outline-none" placeholder="ราคา" />
+                        
+                        <div className="space-y-2 border border-gray-light p-3 rounded-lg">
+                          <label className="block text-sm font-medium text-gray-dark">รูปภาพสินค้า</label>
+                          <input type="text" value={product.image || ""} onChange={(e) => handleEdit("products", product.id, "image", e.target.value)} className="w-full px-3 py-2 border border-gray-light rounded-lg outline-none mb-2" placeholder="URL รูปภาพ (หรืออัปโหลดด้านล่าง)" />
+                          <div className="text-sm text-gray-medium text-center my-2">หรือ</div>
+                          <input 
+                            type="file" 
+                            accept="image/*" 
+                            onChange={(e) => handleImageUpload("products", product.id, e)} 
+                            className="w-full text-sm text-gray-medium file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
+                          />
+                          {product.image && product.image.startsWith('data:image') && (
+                            <p className="text-xs text-green-600 mt-1">อัปโหลดรูปภาพสำเร็จ (Base64)</p>
+                          )}
+                        </div>
+
                         <button onClick={() => setEditing(null)} className="flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-lg font-semibold"><Save className="w-4 h-4" /> บันทึก</button>
                       </div>
                     ) : (
                       <div>
                         <h3 className="font-bold text-foreground mb-2">{product.name}</h3>
+                        {product.image && (
+                          <div className="mb-4 h-32 w-full bg-gray-100 rounded-lg overflow-hidden">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                          </div>
+                        )}
                         <ul className="space-y-1 mb-2">
                           {product.specs.map((spec: string, i: number) => (<li key={i} className="text-sm text-gray-medium">• {spec}</li>))}
                         </ul>
@@ -337,8 +362,8 @@ export default function AdminPage() {
                           <input 
                             type="file" 
                             accept="image/*" 
-                            onChange={(e) => handleImageUpload(project.id, e)} 
-                            className="w-full text-sm text-gray-medium file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                            onChange={(e) => handleImageUpload("portfolio", project.id, e)} 
+                            className="w-full text-sm text-gray-medium file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
                           />
                           {project.image && project.image.startsWith('data:image') && (
                             <p className="text-xs text-green-600 mt-1">อัปโหลดรูปภาพสำเร็จ (Base64)</p>
