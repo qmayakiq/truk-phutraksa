@@ -64,7 +64,13 @@ async function getWebsiteData() {
         token: process.env.KV_REST_API_TOKEN,
       });
       const data = await redis.get('website_data');
-      if (data) return data;
+      if (data && typeof data === 'object') {
+        // Merge fetched data with default data to ensure no missing arrays/objects
+        return {
+          ...defaultData,
+          ...data,
+        };
+      }
     }
     return defaultData;
   } catch (error) {

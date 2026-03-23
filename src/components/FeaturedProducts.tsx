@@ -67,7 +67,7 @@ export default function FeaturedProducts({ data }: FeaturedProductsProps) {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product) => (
+          {products?.map((product) => (
             <div
               key={product.id}
               className="group bg-white rounded-2xl overflow-hidden border border-gray-light hover:shadow-2xl transition-all duration-300"
@@ -88,17 +88,19 @@ export default function FeaturedProducts({ data }: FeaturedProductsProps) {
               </div>
 
               {/* Content */}
-              <div className="p-6">
+              <div className="p-6 flex flex-col h-full">
                 <h3 className="text-xl font-bold text-foreground mb-2">
                   {product.name}
                 </h3>
-                <p className="text-gray-medium text-sm leading-relaxed mb-4">
-                  {product.description}
-                </p>
+                {product.description && (
+                  <p className="text-gray-medium text-sm leading-relaxed mb-4">
+                    {product.description}
+                  </p>
+                )}
 
                 {/* Specs */}
                 <div className="space-y-2 mb-6">
-                  {product.specs.map((spec) => (
+                  {product.specs?.map((spec) => (
                     <div
                       key={spec}
                       className="flex items-center gap-2 text-sm text-gray-dark"
@@ -112,7 +114,7 @@ export default function FeaturedProducts({ data }: FeaturedProductsProps) {
                 {/* Price and CTA */}
                 <div className="flex items-center justify-between mt-auto pt-6 border-t border-gray-light">
                   <div className="text-xl font-bold text-primary">
-                    {product.price}
+                    {product.price || "ติดต่อสอบถาม"}
                   </div>
                   <a
                     href="#contact"

@@ -72,7 +72,7 @@ export default function Portfolio({ data }: { data?: any }) {
 
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-16">
-          {stats.map((stat) => {
+          {stats?.map((stat) => {
             const Icon = stat.icon;
             return (
               <div
@@ -95,7 +95,7 @@ export default function Portfolio({ data }: { data?: any }) {
             ผลงานล่าสุดของเรา
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project: any, index: number) => (
+            {projects?.map((project: any, index: number) => (
               <div
                 key={index}
                 className="group overflow-hidden rounded-xl bg-white shadow-sm border border-gray-light hover:shadow-xl transition-all duration-300"
@@ -107,7 +107,7 @@ export default function Portfolio({ data }: { data?: any }) {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = `https://via.placeholder.com/400x300/0f3460/ffffff?text=${encodeURIComponent(project.title)}`;
+                      target.src = `https://via.placeholder.com/400x300/0f3460/ffffff?text=${encodeURIComponent(project.title || "Project")}`;
                     }}
                   />
                 </div>
@@ -130,7 +130,7 @@ export default function Portfolio({ data }: { data?: any }) {
             ลูกค้าที่ไว้วางใจเรา
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            {clients.map((client: string, index: number) => (
+            {clients?.map((client: string, index: number) => (
               <div
                 key={index}
                 className="flex items-center justify-center p-4 h-20 rounded-xl bg-gray-bg border border-gray-light hover:border-primary/20 hover:shadow-md transition-all"
