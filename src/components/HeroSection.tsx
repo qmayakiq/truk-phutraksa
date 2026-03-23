@@ -1,3 +1,5 @@
+"use client";
+
 import { ArrowRight, FileText } from "lucide-react";
 
 export default function HeroSection({ data }: { data?: any }) {
