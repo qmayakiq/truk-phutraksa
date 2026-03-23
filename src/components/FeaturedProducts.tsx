@@ -9,6 +9,7 @@ interface Product {
   description?: string;
   specs: string[];
   image?: string | null;
+  price?: string;
 }
 
 interface FeaturedProductsProps {
@@ -108,14 +109,23 @@ export default function FeaturedProducts({ data }: FeaturedProductsProps) {
                   ))}
                 </div>
 
-                {/* CTA */}
-                <a
-                  href="#contact"
-                  className="group/btn inline-flex items-center gap-2 text-primary font-semibold text-sm hover:text-primary-light transition-colors"
-                >
-                  ดูสเปคเพิ่มเติม
-                  <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                </a>
+                {/* Price and CTA */}
+                <div className="flex items-center justify-between mt-auto pt-6 border-t border-gray-light">
+                  <div className="text-xl font-bold text-primary">
+                    {product.price}
+                  </div>
+                  <a
+                    href="#contact"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="inline-flex items-center gap-2 text-accent font-semibold hover:text-accent-hover transition-colors"
+                  >
+                    ขอใบเสนอราคา
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
+                </div>
               </div>
             </div>
           ))}

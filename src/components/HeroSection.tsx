@@ -62,6 +62,10 @@ export default function HeroSection({ data }: { data?: any }) {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <a
             href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+            }}
             className="group flex items-center gap-2 bg-accent hover:bg-accent/90 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all shadow-lg shadow-accent/30 hover:shadow-xl hover:shadow-accent/40"
           >
             <FileText className="w-5 h-5" />
@@ -70,6 +74,10 @@ export default function HeroSection({ data }: { data?: any }) {
           </a>
           <a
             href="#portfolio"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' });
+            }}
             className="flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all border border-white/20"
           >
             ดูผลงานทั้งหมด

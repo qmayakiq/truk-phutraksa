@@ -147,9 +147,13 @@ export default function Portfolio({ data }: { data?: any }) {
         <div className="text-center">
           <a
             href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+            }}
             className="group inline-flex items-center gap-2 bg-primary hover:bg-primary-light text-white px-8 py-4 rounded-xl text-lg font-semibold transition-colors"
           >
-            ดูตัวอย่างโครงการล่าสุด
+            สนใจสั่งประกอบรถ ติดต่อเรา
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </a>
         </div>
