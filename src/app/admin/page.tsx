@@ -44,6 +44,21 @@ export default function AdminPage() {
     }));
   };
 
+  const handleImageUpload = (id: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 1024 * 1024) { // 1MB limit
+        alert("ขนาดไฟล์ใหญ่เกินไป กรุณาอัปโหลดรูปภาพขนาดไม่เกิน 1MB");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        handleEdit("portfolio", id, "image", reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleAdd = (section: string) => {
     const id = Date.now();
     const items: any = {
@@ -224,10 +239,25 @@ export default function AdminPage() {
                   <div key={project.id} className="p-4 border border-gray-light rounded-lg">
                     {editing === `portfolio-${project.id}` ? (
                       <div className="space-y-4">
-                        <input type="text" value={project.title} onChange={(e) => handleEdit("portfolio", project.id, "title", e.target.value)} className="w-full px-3 py-2 border border-gray-light rounded-lg outline-none" />
-                        <input type="text" value={project.client} onChange={(e) => handleEdit("portfolio", project.id, "client", e.target.value)} className="w-full px-3 py-2 border border-gray-light rounded-lg outline-none" />
-                        <input type="text" value={project.image} onChange={(e) => handleEdit("portfolio", project.id, "image", e.target.value)} className="w-full px-3 py-2 border border-gray-light rounded-lg outline-none" />
-                        <button onClick={() => setEditing(null)} className="flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-lg font-semibold"><Save className="w-4 h-4" /> บันทึก</button>
+                        <input type="text" value={project.title} onChange={(e) => handleEdit("portfolio", project.id, "title", e.target.value)} className="w-full px-3 py-2 border border-gray-light rounded-lg outline-none" placeholder="ชื่อโครงการ" />
+                        <input type="text" value={project.client} onChange={(e) => handleEdit("portfolio", project.id, "client", e.target.value)} className="w-full px-3 py-2 border border-gray-light rounded-lg outline-none" placeholder="ชื่อลูกค้า" />
+                        
+                        <div className="space-y-2 border border-gray-light p-3 rounded-lg">
+                          <label className="block text-sm font-medium text-gray-dark">รูปภาพผลงาน</label>
+                          <input type="text" value={project.image} onChange={(e) => handleEdit("portfolio", project.id, "image", e.target.value)} className="w-full px-3 py-2 border border-gray-light rounded-lg outline-none mb-2" placeholder="URL รูปภาพ (หรืออัปโหลดด้านล่าง)" />
+                          <div className="text-sm text-gray-medium text-center my-2">หรือ</div>
+                          <input 
+                            type="file" 
+                            accept="image/*" 
+                            onChange={(e) => handleImageUpload(project.id, e)} 
+                            className="w-full text-sm text-gray-medium file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                          />
+                          {project.image && project.image.startsWith('data:image') && (
+                            <p className="text-xs text-green-600 mt-1">อัปโหลดรูปภาพสำเร็จ (Base64)</p>
+                          )}
+                        </div>
+
+                        <button onClick={() => setEditing(null)} className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-white px-4 py-2 rounded-lg font-semibold transition-colors"><Save className="w-4 h-4" /> บันทึก</button>
                       </div>
                     ) : (
                       <div>
