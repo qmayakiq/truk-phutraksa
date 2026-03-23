@@ -376,7 +376,12 @@ export default function AdminPage() {
                       <div>
                         <h3 className="font-bold text-foreground mb-2">{project.title}</h3>
                         <p className="text-gray-medium mb-2">{project.client}</p>
-                        <p className="text-sm text-gray-medium mb-4">{project.image}</p>
+                        {project.image && (
+                          <div className="mb-4 h-40 w-full bg-gray-100 rounded-lg overflow-hidden">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={project.image} alt={project.title} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = `https://via.placeholder.com/400x300/0f3460/ffffff?text=${encodeURIComponent(project.title || "Project")}`; }} />
+                          </div>
+                        )}
                         <div className="flex gap-2">
                           <button onClick={() => setEditing(`portfolio-${project.id}`)} className="flex items-center gap-1 text-sm text-gray-medium hover:text-primary"><Edit2 className="w-4 h-4" /> แก้ไข</button>
                           <button onClick={() => handleDelete("portfolio", project.id)} className="flex items-center gap-1 text-sm text-gray-medium hover:text-red-500"><Trash2 className="w-4 h-4" /> ลบ</button>

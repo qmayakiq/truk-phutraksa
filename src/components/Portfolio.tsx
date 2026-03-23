@@ -143,17 +143,43 @@ export default function Portfolio({ data }: { data?: any }) {
           </div>
         </div>
 
-        {/* CTA */}
+        {/* Portfolio Gallery Preview */}
+        <div className="mb-12">
+          <h3 className="text-center text-xl font-semibold text-gray-dark mb-8">
+            รูปภาพผลงาน
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {projects?.slice(0, 8).map((project: any, index: number) => (
+              <div
+                key={index}
+                className="group relative overflow-hidden rounded-xl aspect-square bg-gray-bg border border-gray-light hover:shadow-lg transition-all duration-300"
+              >
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = `https://via.placeholder.com/400x400/0f3460/ffffff?text=${encodeURIComponent(project.title || "Project")}`;
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                  <h4 className="text-white text-sm font-semibold truncate">{project.title}</h4>
+                  <p className="text-white/80 text-xs truncate">{project.client}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA to full portfolio page */}
         <div className="text-center">
           <a
-            href="#contact"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-            }}
+            href="/portfolio"
             className="group inline-flex items-center gap-2 bg-primary hover:bg-primary-light text-white px-8 py-4 rounded-xl text-lg font-semibold transition-colors"
           >
-            สนใจสั่งประกอบรถ ติดต่อเรา
+            ดูผลงานทั้งหมด
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </a>
         </div>
