@@ -6,27 +6,75 @@ import FeaturedProducts from "@/components/FeaturedProducts";
 import Portfolio from "@/components/Portfolio";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import { Redis } from '@upstash/redis';
+
+// Force dynamic rendering to ensure fresh data is always fetched
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+const defaultData = {
+  stats: [
+    { id: 1, label: "รถที่จำหน่าย", value: "150+" },
+    { id: 2, label: "ลูกค้าทั่วประเทศ", value: "20+" },
+    { id: 3, label: "ประสบการณ์", value: "10+" },
+  ],
+  products: [
+    {
+      id: 1,
+      name: "รถบรรทุกขยะแบบอัดท้าย 6 ล้อ",
+      specs: ["ความจุ 6 ลูกบาศก์เมตร", "ระบบไฮดรอลิก", "ตัวถังแข็งแรง"],
+      price: "ติดต่อ",
+    },
+    {
+      id: 2,
+      name: "รถบรรทุกขยะแบบเทท้าย 8 ล้อ",
+      specs: ["ความจุ 8 ลูกบาศก์เมตร", "ระบบเทอัตโนมัติ", "เหมาะกับขยะอ่อน"],
+      price: "ติดต่อ",
+    },
+  ],
+  portfolio: [
+    {
+      id: 1,
+      title: "รถบรรทุกขยะ 6 ล้อ",
+      client: "เทศบาลนครหาดใหญ่",
+      image: "/images/portfolio/project1.jpg",
+    },
+    {
+      id: 2,
+      title: "รถอัดขยะ 10 ล้อ",
+      client: "บริษัท ขยะสะอาด จำกัด",
+      image: "/images/portfolio/project2.jpg",
+    },
+  ],
+  clients: [
+    "เทศบาลนครเชียงใหม่",
+    "อบต.บางพลี",
+    "เทศบาลเมืองภูเก็ต",
+    "เทศบาลนครขอนแก่น",
+    "อบจ.สุราษฎร์ธานี",
+    "เทศบาลนครนครราชสีมา",
+  ],
+};
 
 async function getWebsiteData() {
   try {
-    // In server components, we need to use an absolute URL or directly read from DB
-    // To avoid complex URL resolution in Vercel, we'll try to fetch from our API
-    // Note: In a real production app, it's better to read directly from DB in Server Components
-    const baseUrl = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}` 
-      : 'http://localhost:3000';
-      
-    const res = await fetch(`${baseUrl}/admin/api/save-data`, { next: { revalidate: 0 } }); // No cache
-    if (!res.ok) return null;
-    return res.json();
+    if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+      const redis = new Redis({
+        url: process.env.KV_REST_API_URL,
+        token: process.env.KV_REST_API_TOKEN,
+      });
+      const data = await redis.get('website_data');
+      if (data) return data;
+    }
+    return defaultData;
   } catch (error) {
     console.error("Failed to fetch website data:", error);
-    return null;
+    return defaultData;
   }
 }
 
 export default async function Home() {
-  const data = await getWebsiteData();
+  const data = await getWebsiteData() as any;
 
   return (
     <div className="flex min-h-screen flex-col">
