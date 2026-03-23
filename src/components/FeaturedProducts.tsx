@@ -1,6 +1,21 @@
+"use client";
+
 import { ArrowRight, Truck } from "lucide-react";
 
-const products = [
+interface Product {
+  id: number;
+  name: string;
+  nameEn?: string;
+  description?: string;
+  specs: string[];
+  image?: string | null;
+}
+
+interface FeaturedProductsProps {
+  data?: Product[];
+}
+
+const defaultProducts: Product[] = [
   {
     id: 1,
     name: "รถบรรทุกขยะแบบอัดท้าย",
@@ -30,7 +45,9 @@ const products = [
   },
 ];
 
-export default function FeaturedProducts() {
+export default function FeaturedProducts({ data }: FeaturedProductsProps) {
+  const products = data || defaultProducts;
+
   return (
     <section id="products" className="py-20 lg:py-28 bg-gray-bg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
