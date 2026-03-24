@@ -1,21 +1,30 @@
-import { MapPin, Phone, Mail, Facebook, Linkedin, Youtube } from "lucide-react";
+import { MapPin, Phone, Mail, Facebook, Linkedin, Youtube, MessageCircle, Instagram, Twitter } from "lucide-react";
 
 const quickLinks = [
-  { label: "หน้าแรก", href: "#hero" },
-  { label: "เกี่ยวกับเรา", href: "#about" },
-  { label: "สินค้าของเรา", href: "#products" },
-  { label: "ผลงานที่ผ่านมา", href: "#portfolio" },
-  { label: "ติดต่อเรา", href: "#contact" },
+  { name: "หน้าแรก", href: "#hero" },
+  { name: "เกี่ยวกับเรา", href: "#about" },
+  { name: "สินค้า", href: "#products" },
+  { name: "ผลงาน", href: "#portfolio" },
+  { name: "ติดต่อ", href: "#contact" },
 ];
 
 const productLinks = [
-  { label: "รถบรรทุกขยะแบบอัดท้าย", href: "#products" },
-  { label: "รถบรรทุกขยะแบบเทท้าย", href: "#products" },
-  { label: "รถบรรทุกขยะแบบอัดข้าง", href: "#products" },
-  { label: "บริการซ่อมบำรุง", href: "#services" },
+  { name: "รถอัดขยะท้าย", href: "#products" },
+  { name: "รถเทท้าย", href: "#products" },
+  { name: "รถอัดข้าง", href: "#products" },
+  { name: "บริการซ่อม", href: "#services" },
 ];
 
-export default function Footer() {
+const iconMap: { [key: string]: any } = {
+  Facebook,
+  MessageCircle,
+  Youtube,
+  Instagram,
+  Twitter,
+  Linkedin,
+};
+
+export default function Footer({ data }: { data?: any }) {
   return (
     <footer className="bg-primary-dark text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,27 +43,21 @@ export default function Footer() {
               มาตรฐานระดับมืออาชีพ
             </p>
             <div className="flex items-center gap-3">
-              <a
-                href="#"
-                className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors"
-                aria-label="Facebook"
-              >
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors"
-                aria-label="YouTube"
-              >
-                <Youtube className="w-5 h-5" />
-              </a>
+              {(data?.socialLinks || []).map((social: any, index: number) => {
+                const IconComponent = iconMap[social.icon] || Facebook;
+                return (
+                  <a
+                    key={index}
+                    href={social.url || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors"
+                    aria-label={social.name}
+                  >
+                    <IconComponent className="w-5 h-5" />
+                  </a>
+                );
+              })}
             </div>
           </div>
 
@@ -65,12 +68,12 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3">
               {quickLinks.map((link) => (
-                <li key={link.label}>
+                <li key={link.name}>
                   <a
                     href={link.href}
                     className="text-sm text-white/60 hover:text-white transition-colors"
                   >
-                    {link.label}
+                    {link.name}
                   </a>
                 </li>
               ))}
@@ -84,12 +87,12 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3">
               {productLinks.map((link) => (
-                <li key={link.label}>
+                <li key={link.name}>
                   <a
                     href={link.href}
                     className="text-sm text-white/60 hover:text-white transition-colors"
                   >
-                    {link.label}
+                    {link.name}
                   </a>
                 </li>
               ))}

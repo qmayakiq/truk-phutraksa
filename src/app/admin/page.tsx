@@ -72,7 +72,7 @@ export default function AdminPage() {
       if (section === "settings" || section === "about" || section === "contactInfo") {
         return { ...prev, [section]: { ...prev[section], [field]: value } };
       }
-      return { ...prev, [section]: prev[section].map((item: any) => item.id === id ? { ...item, [field]: value } : item) };
+      return { ...prev, [section]: prev[section].map((item: any, index: number) => index === id ? { ...item, [field]: value } : item) };
     });
   };
 
@@ -142,6 +142,20 @@ export default function AdminPage() {
     setData((prev: any) => ({
       ...prev,
       about: { ...prev.about, certifications: prev.about.certifications.filter((_: any, i: number) => i !== index) },
+    }));
+  };
+
+  const handleSocialAdd = () => {
+    setData((prev: any) => ({
+      ...prev,
+      socialLinks: [...(prev.socialLinks || []), { name: "", url: "", icon: "Facebook" }],
+    }));
+  };
+
+  const handleSocialDelete = (index: number) => {
+    setData((prev: any) => ({
+      ...prev,
+      socialLinks: prev.socialLinks.filter((_: any, i: number) => i !== index),
     }));
   };
 
@@ -217,6 +231,7 @@ export default function AdminPage() {
     { key: "clients", label: "ลูกค้า" },
     { key: "testimonials", label: "รีวิว" },
     { key: "contact", label: "ข้อมูลติดต่อ" },
+    { key: "social", label: "โซเชียลมีเดีย" },
   ];
 
   return (
@@ -553,6 +568,48 @@ export default function AdminPage() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* ===== โซเชียลมีเดีย ===== */}
+          {activeTab === "social" && (
+            <div>
+              <h2 className="text-xl font-bold text-foreground mb-6">จัดการโซเชียลมีเดีย</h2>
+              <div className="space-y-4">
+                {(data.socialLinks || []).map((link: any, index: number) => (
+                  <div key={index} className="p-4 border border-gray-light rounded-lg">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      <div>
+                        <label className="block text-sm font-bold text-foreground mb-2">ชื่อ</label>
+                        <input type="text" value={link.name} onChange={(e) => handleEdit("socialLinks", index, "name", e.target.value)} className={inputCls} placeholder="Facebook, LINE, YouTube..." />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-foreground mb-2">URL</label>
+                        <input type="text" value={link.url} onChange={(e) => handleEdit("socialLinks", index, "url", e.target.value)} className={inputCls} placeholder="https://..." />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-foreground mb-2">Icon</label>
+                        <select value={link.icon} onChange={(e) => handleEdit("socialLinks", index, "icon", e.target.value)} className={inputCls}>
+                          <option value="Facebook">Facebook</option>
+                          <option value="MessageCircle">LINE</option>
+                          <option value="Youtube">YouTube</option>
+                          <option value="Instagram">Instagram</option>
+                          <option value="Twitter">Twitter</option>
+                          <option value="Linkedin">LinkedIn</option>
+                        </select>
+                      </div>
+                      <div className="flex items-end">
+                        <button onClick={() => handleSocialDelete(index)} className="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
+                          ลบ
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <button onClick={handleSocialAdd} className="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
+                  + เพิ่มโซเชียลมีเดีย
+                </button>
               </div>
             </div>
           )}

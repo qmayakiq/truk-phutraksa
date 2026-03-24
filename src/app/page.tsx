@@ -100,7 +100,7 @@ export default async function Home() {
         <TestimonialsSection data={data?.testimonials} />
         <ContactSection data={data} />
       </main>
-      <Footer />
+      <Footer data={data} />
       <FloatingContact />
     </div>
   );

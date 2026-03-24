@@ -51,6 +51,11 @@ const defaultData = {
     facebook: "",
     youtube: "",
   },
+  socialLinks: [
+    { name: "Facebook", url: "", icon: "Facebook" },
+    { name: "LINE", url: "", icon: "MessageCircle" },
+    { name: "YouTube", url: "", icon: "Youtube" },
+  ],
 };
 
 export async function GET() {
