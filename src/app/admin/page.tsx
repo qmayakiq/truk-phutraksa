@@ -361,7 +361,7 @@ export default function AdminPage() {
                           type="text" 
                           value={stat.label} 
                           onChange={(e) => handleEdit("stats", stat.id, "label", e.target.value)} 
-                          className={`${inputCls} flex-1`}
+                          className="w-full px-4 py-3 border-2 border-gray-light rounded-lg outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-base font-medium text-gray-900 bg-white"
                           autoFocus
                           placeholder="ชื่อสถิติ"
                         />
@@ -369,7 +369,7 @@ export default function AdminPage() {
                           type="text" 
                           value={stat.value} 
                           onChange={(e) => handleEdit("stats", stat.id, "value", e.target.value)} 
-                          className={`${inputCls} w-24`}
+                          className="w-32 px-4 py-3 border-2 border-gray-light rounded-lg outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-base font-medium text-gray-900 bg-white"
                           placeholder="ค่า"
                         />
                         <button onClick={() => setEditing(null)} className="p-2 text-gray-medium hover:text-primary"><Save className="w-5 h-5" /></button>
