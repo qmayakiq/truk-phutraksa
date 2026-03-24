@@ -77,6 +77,11 @@ export default function AdminPage() {
       if (section === "settings" || section === "about" || section === "contactInfo") {
         return { ...prev, [section]: { ...prev[section], [field]: value } };
       }
+      // For stats, products, portfolio, testimonials - use id to find the item
+      if (section === "stats" || section === "products" || section === "portfolio" || section === "testimonials") {
+        return { ...prev, [section]: prev[section].map((item: any) => item.id === id ? { ...item, [field]: value } : item) };
+      }
+      // For arrays using index (like socialLinks)
       return { ...prev, [section]: prev[section].map((item: any, index: number) => index === id ? { ...item, [field]: value } : item) };
     });
   };
@@ -118,14 +123,14 @@ export default function AdminPage() {
       testimonials: { id, name: "ชื่อลูกค้า", role: "ตำแหน่ง", org: "หน่วยงาน", content: "ความคิดเห็น", rating: 5 },
     };
     if (section === "clients") {
-      setData((prev: any) => ({ ...prev, clients: [...prev.clients, items.clients] }));
+      setData((prev: any) => ({ ...prev, clients: [...(prev.clients || []), items.clients] }));
     } else {
       setData((prev: any) => ({ ...prev, [section]: [...(prev[section] || []), items[section]] }));
     }
   };
 
   const handleDelete = (section: string, id: number) => {
-    setData((prev: any) => ({ ...prev, [section]: prev[section].filter((item: any) => item.id !== id) }));
+    setData((prev: any) => ({ ...prev, [section]: (prev[section] || []).filter((item: any) => item.id !== id) }));
   };
 
   const handleCertAdd = () => {
@@ -352,8 +357,21 @@ export default function AdminPage() {
                   <div key={stat.id} className="flex items-center gap-4 p-4 border border-gray-light rounded-lg">
                     {editing === `stats-${stat.id}` ? (
                       <div className="flex items-center gap-4 flex-1">
-                        <input type="text" value={stat.label} onChange={(e) => handleEdit("stats", stat.id, "label", e.target.value)} className={`${inputCls} flex-1`} />
-                        <input type="text" value={stat.value} onChange={(e) => handleEdit("stats", stat.id, "value", e.target.value)} className={`${inputCls} w-24`} />
+                        <input 
+                          type="text" 
+                          value={stat.label} 
+                          onChange={(e) => handleEdit("stats", stat.id, "label", e.target.value)} 
+                          className={`${inputCls} flex-1`}
+                          autoFocus
+                          placeholder="ชื่อสถิติ"
+                        />
+                        <input 
+                          type="text" 
+                          value={stat.value} 
+                          onChange={(e) => handleEdit("stats", stat.id, "value", e.target.value)} 
+                          className={`${inputCls} w-24`}
+                          placeholder="ค่า"
+                        />
                         <button onClick={() => setEditing(null)} className="p-2 text-gray-medium hover:text-primary"><Save className="w-5 h-5" /></button>
                       </div>
                     ) : (
