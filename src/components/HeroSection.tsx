@@ -89,16 +89,16 @@ export default function HeroSection({ data }: { data?: any }) {
         {/* Stats */}
         <div className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto">
           <div>
-            <div className="text-3xl sm:text-4xl font-bold text-white drop-shadow-md">500+</div>
-            <div className="text-sm text-white/80 mt-1 font-medium">คันที่ส่งมอบ</div>
+            <div className="text-3xl sm:text-4xl font-bold text-gray-900 drop-shadow-lg">500+</div>
+            <div className="text-sm text-gray-800 mt-1 font-medium">คันที่ส่งมอบ</div>
           </div>
           <div>
-            <div className="text-3xl sm:text-4xl font-bold text-white drop-shadow-md">200+</div>
-            <div className="text-sm text-white/80 mt-1 font-medium">ลูกค้าทั่วประเทศ</div>
+            <div className="text-3xl sm:text-4xl font-bold text-gray-900 drop-shadow-lg">200+</div>
+            <div className="text-sm text-gray-800 mt-1 font-medium">ลูกค้าทั่วประเทศ</div>
           </div>
           <div>
-            <div className="text-3xl sm:text-4xl font-bold text-white drop-shadow-md">20+</div>
-            <div className="text-sm text-white/80 mt-1 font-medium">ปีแห่งประสบการณ์</div>
+            <div className="text-3xl sm:text-4xl font-bold text-gray-900 drop-shadow-lg">20+</div>
+            <div className="text-sm text-gray-800 mt-1 font-medium">ปีแห่งประสบการณ์</div>
           </div>
         </div>
       </div>
