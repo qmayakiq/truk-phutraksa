@@ -168,7 +168,7 @@ export default function ContactSection() {
 
               {/* Phone */}
               <a
-                href="tel:+66812345678"
+                href="tel:+66828800878"
                 className="flex items-center gap-4 p-4 rounded-xl bg-primary/5 hover:bg-primary/10 transition-colors mb-4"
               >
                 <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center flex-shrink-0">
@@ -226,6 +226,28 @@ export default function ContactSection() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Google Maps */}
+        <div className="mt-12">
+          <h3 className="text-xl font-bold text-foreground mb-6 text-center">
+            แผนที่โรงงาน
+          </h3>
+          <div className="rounded-2xl overflow-hidden border border-gray-light shadow-sm h-[300px] lg:h-[400px]">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3877.048!2d100.4!3d13.65!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDM5JzAwLjAiTiAxMDDCsDI0JzAwLjAiRQ!5e0!3m2!1sth!2sth!4v1"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="แผนที่โรงงาน TRUK พุทธรักษา"
+            />
+          </div>
+          <p className="text-center text-sm text-gray-medium mt-4">
+            123/45 ถ.พระราม 2 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพฯ 10150
+          </p>
         </div>
       </div>
     </section>

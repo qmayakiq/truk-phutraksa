@@ -1,11 +1,15 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import AboutSection from "@/components/AboutSection";
 import WhyChooseUs from "@/components/WhyChooseUs";
-import ServicesSection from "@/components/ServicesSection";
 import FeaturedProducts from "@/components/FeaturedProducts";
+import ServicesSection from "@/components/ServicesSection";
+import ProcessSection from "@/components/ProcessSection";
 import Portfolio from "@/components/Portfolio";
+import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import FloatingContact from "@/components/FloatingContact";
 import { Redis } from '@upstash/redis';
 
 // Force dynamic rendering to ensure fresh data is always fetched
@@ -87,13 +91,17 @@ export default async function Home() {
       <Navbar />
       <main className="flex-1">
         <HeroSection data={data} />
+        <AboutSection />
         <WhyChooseUs />
-        <ServicesSection />
         <FeaturedProducts data={data?.products} />
+        <ServicesSection />
+        <ProcessSection />
         <Portfolio data={data} />
+        <TestimonialsSection />
         <ContactSection />
       </main>
       <Footer />
+      <FloatingContact />
     </div>
   );
 }
