@@ -13,6 +13,7 @@
   --gray-dark: #4a4a4a;
   --gray-medium: #6b7280;
   --gray-light: #e5e7eb;
+  --font-noto-thai: "Noto Sans Thai", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 @theme inline {
@@ -28,7 +29,7 @@
   --color-gray-dark: var(--gray-dark);
   --color-gray-medium: var(--gray-medium);
   --color-gray-light: var(--gray-light);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-noto-thai), system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
