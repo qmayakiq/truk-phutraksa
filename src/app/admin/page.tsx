@@ -30,6 +30,11 @@ export default function AdminPage() {
     fetch("/admin/api/save-data")
       .then((res) => res.json())
       .then((result) => {
+        if (!result.stats) result.stats = [
+          { id: 1, label: "รถที่จำหน่าย", value: "150+" },
+          { id: 2, label: "ลูกค้าทั่วประเทศ", value: "20+" },
+          { id: 3, label: "ประสบการณ์", value: "10+" },
+        ];
         if (!result.settings) result.settings = { heroBackground: "" };
         if (!result.about) result.about = { companyHistory: "", vision: "", mission: "", certifications: [] };
         if (!result.testimonials) result.testimonials = [];
