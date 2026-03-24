@@ -2,7 +2,7 @@
 
 import { Star, Quote } from "lucide-react";
 
-const testimonials = [
+const defaultTestimonials = [
   {
     name: "นายสมชาย วงศ์ประเสริฐ",
     role: "ผู้อำนวยการกองสาธารณสุข",
@@ -26,7 +26,8 @@ const testimonials = [
   },
 ];
 
-export default function TestimonialsSection() {
+export default function TestimonialsSection({ data }: { data?: any[] }) {
+  const testimonials = data?.length ? data : defaultTestimonials;
   return (
     <section id="testimonials" className="py-20 lg:py-28 bg-gray-bg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

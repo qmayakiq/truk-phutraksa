@@ -91,14 +91,14 @@ export default async function Home() {
       <Navbar />
       <main className="flex-1">
         <HeroSection data={data} />
-        <AboutSection />
+        <AboutSection data={data} />
         <WhyChooseUs />
         <FeaturedProducts data={data?.products} />
         <ServicesSection />
         <ProcessSection />
         <Portfolio data={data} />
-        <TestimonialsSection />
-        <ContactSection />
+        <TestimonialsSection data={data?.testimonials} />
+        <ContactSection data={data} />
       </main>
       <Footer />
       <FloatingContact />

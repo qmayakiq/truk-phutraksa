@@ -10,7 +10,8 @@ const vehicleTypes = [
   "อื่นๆ",
 ];
 
-export default function ContactSection() {
+export default function ContactSection({ data }: { data?: any }) {
+  const contact = data?.contactInfo;
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -168,7 +169,7 @@ export default function ContactSection() {
 
               {/* Phone */}
               <a
-                href="tel:+66828800878"
+                href={`tel:${(contact?.phone || "082-880-0878").replace(/-/g, '')}`}
                 className="flex items-center gap-4 p-4 rounded-xl bg-primary/5 hover:bg-primary/10 transition-colors mb-4"
               >
                 <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center flex-shrink-0">
@@ -177,14 +178,14 @@ export default function ContactSection() {
                 <div>
                   <div className="text-sm text-gray-medium">โทรหาเรา</div>
                   <div className="text-lg font-bold text-primary">
-                    082-880-0878
+                    {contact?.phone || "082-880-0878"}
                   </div>
                 </div>
               </a>
 
               {/* LINE */}
               <a
-                href="https://line.me/ti/p/@truk"
+                href={`https://line.me/ti/p/${contact?.line || "@truk"}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 p-4 rounded-xl bg-green-50 hover:bg-green-100 transition-colors mb-4"
@@ -195,7 +196,7 @@ export default function ContactSection() {
                 <div>
                   <div className="text-sm text-gray-medium">LINE Official</div>
                   <div className="text-lg font-bold text-accent-green">
-                    @truk
+                    {contact?.line || "@truk"}
                   </div>
                 </div>
               </a>
@@ -210,18 +211,18 @@ export default function ContactSection() {
                 <div className="flex justify-between">
                   <span className="text-gray-medium">จันทร์ - ศุกร์</span>
                   <span className="font-semibold text-foreground">
-                    08:00 - 17:00
+                    {contact?.businessHours?.weekday || "08:00 - 17:00"}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-medium">เสาร์</span>
                   <span className="font-semibold text-foreground">
-                    08:00 - 12:00
+                    {contact?.businessHours?.saturday || "08:00 - 12:00"}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-medium">อาทิตย์</span>
-                  <span className="font-semibold text-secondary">หยุดทำการ</span>
+                  <span className="font-semibold text-secondary">{contact?.businessHours?.sunday || "หยุดทำการ"}</span>
                 </div>
               </div>
             </div>
@@ -235,7 +236,7 @@ export default function ContactSection() {
           </h3>
           <div className="rounded-2xl overflow-hidden border border-gray-light shadow-sm h-[300px] lg:h-[400px]">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3877.048!2d100.4!3d13.65!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDM5JzAwLjAiTiAxMDDCsDI0JzAwLjAiRQ!5e0!3m2!1sth!2sth!4v1"
+              src={contact?.mapUrl || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3877.048!2d100.4!3d13.65!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDM5JzAwLjAiTiAxMDDCsDI0JzAwLjAiRQ!5e0!3m2!1sth!2sth!4v1"}
               width="100%"
               height="100%"
               style={{ border: 0 }}
@@ -246,7 +247,7 @@ export default function ContactSection() {
             />
           </div>
           <p className="text-center text-sm text-gray-medium mt-4">
-            123/45 ถ.พระราม 2 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพฯ 10150
+            {contact?.address || "123/45 ถ.พระราม 2 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพฯ 10150"}
           </p>
         </div>
       </div>
