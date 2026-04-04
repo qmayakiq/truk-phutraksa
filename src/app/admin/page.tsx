@@ -5,6 +5,7 @@ import { Edit2, Save, Plus, Trash2, Eye, Lock, LogOut, Star } from "lucide-react
 
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
+  const [authConfigured, setAuthConfigured] = useState(true);
   const [password, setPassword] = useState("");
   const [authLoading, setAuthLoading] = useState(true);
   const [authError, setAuthError] = useState("");
@@ -24,6 +25,7 @@ export default function AdminPage() {
       .then((result) => {
         if (!mounted) return;
         const isAuthed = Boolean(result?.authenticated);
+        setAuthConfigured(result?.configured !== false);
         setAuthenticated(isAuthed);
         if (isAuthed) {
           sessionStorage.setItem("admin_auth", "true");
@@ -33,6 +35,7 @@ export default function AdminPage() {
       })
       .catch(() => {
         if (!mounted) return;
+        setAuthConfigured(true);
         setAuthenticated(false);
         sessionStorage.removeItem("admin_auth");
       })
@@ -79,6 +82,9 @@ export default function AdminPage() {
       if (result.success) {
         sessionStorage.setItem("admin_auth", "true");
         setAuthenticated(true);
+      } else if (result.code === "ADMIN_PASSWORD_NOT_CONFIGURED") {
+        setAuthConfigured(false);
+        setAuthError("ยังไม่ได้ตั้งค่า ADMIN_PASSWORD บนเซิร์ฟเวอร์");
       } else {
         setAuthError("รหัสผ่านไม่ถูกต้อง");
       }
@@ -240,10 +246,16 @@ export default function AdminPage() {
               placeholder="รหัสผ่าน"
               required
               autoFocus
+              disabled={!authConfigured}
             />
           </div>
+          {!authConfigured && (
+            <p className="text-amber-600 text-sm mb-4 text-center">
+              ผู้ดูแลระบบต้องตั้งค่า `ADMIN_PASSWORD` ก่อนใช้งานหน้านี้
+            </p>
+          )}
           {authError && <p className="text-red-500 text-sm mb-4 text-center">{authError}</p>}
-          <button type="submit" className="w-full bg-accent hover:bg-accent/90 text-white py-3 rounded-lg font-semibold transition-colors">
+          <button type="submit" disabled={!authConfigured} className="w-full bg-accent hover:bg-accent/90 text-white py-3 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
             เข้าสู่ระบบ
           </button>
         </form>

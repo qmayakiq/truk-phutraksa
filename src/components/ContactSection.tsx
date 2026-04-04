@@ -40,7 +40,11 @@ export default function ContactSection({ data }: { data?: any }) {
       } else {
         const errorData = await response.json();
         console.log('Error response:', errorData);
-        alert("เกิดข้อผิดพลาด กรุณาลองใหม่");
+        if (errorData?.code === "EMAIL_NOT_CONFIGURED") {
+          alert("ระบบรับอีเมลยังไม่ได้ตั้งค่า กรุณาติดต่อทางโทรศัพท์หรือ LINE ไปก่อน");
+        } else {
+          alert("เกิดข้อผิดพลาด กรุณาลองใหม่");
+        }
       }
     } catch (error) {
       console.error('Fetch error:', error);

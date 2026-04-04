@@ -1,15 +1,35 @@
-import { Resend } from 'resend';
+import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResendClient() {
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (!apiKey) {
+    return null;
+  }
+
+  return new Resend(apiKey);
+}
 
 export async function POST(request: Request) {
   try {
     const { name, phone, vehicleType, message } = await request.json();
+    const resend = getResendClient();
+
+    if (!resend) {
+      return Response.json(
+        {
+          success: false,
+          error: "Email service is not configured",
+          code: "EMAIL_NOT_CONFIGURED",
+        },
+        { status: 503 }
+      );
+    }
 
     // ส่ง email ไปยัง admin
     const { data, error } = await resend.emails.send({
-      from: 'TRUK Phutraksa <onboarding@resend.dev>',
-      to: ['qmayakiq@gmail.com'], // เปลี่ยนเป็น email ของคุณ
+      from: "TRUK Phutraksa <onboarding@resend.dev>",
+      to: ["qmayakiq@gmail.com"], // เปลี่ยนเป็น email ของคุณ
       subject: `🚛 ขอใบเสนอราคา: ${vehicleType}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -42,7 +62,7 @@ export async function POST(request: Request) {
             
             <div style="margin-top: 30px; padding: 20px; background: #fff3cd; border-left: 4px solid #f39c12; border-radius: 5px;">
               <p style="margin: 0; color: #856404;">
-                <strong>⏰ เวลา:</strong> ${new Date().toLocaleString('th-TH')}
+                <strong>⏰ เวลา:</strong> ${new Date().toLocaleString("th-TH")}
               </p>
             </div>
             
@@ -57,13 +77,13 @@ export async function POST(request: Request) {
     });
 
     if (error) {
-      console.error('Resend error:', error);
-      return Response.json({ error: 'Failed to send email' }, { status: 500 });
+      console.error("Resend error:", error);
+      return Response.json({ success: false, error: "Failed to send email" }, { status: 500 });
     }
 
     return Response.json({ success: true, data });
   } catch (error) {
-    console.error('API error:', error);
-    return Response.json({ error: 'Internal server error' }, { status: 500 });
+    console.error("API error:", error);
+    return Response.json({ success: false, error: "Internal server error" }, { status: 500 });
   }
 }

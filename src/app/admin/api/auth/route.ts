@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   getAdminCookieName,
   getAdminSessionToken,
+  isAdminPasswordConfigured,
   isAdminAuthenticated,
 } from "@/lib/admin-auth";
 
@@ -19,13 +20,27 @@ function getCookieOptions() {
 
 export async function GET(request: NextRequest) {
   const cookieValue = request.cookies.get(cookieName)?.value;
-  return NextResponse.json({ authenticated: isAdminAuthenticated(cookieValue) });
+  return NextResponse.json({
+    authenticated: isAdminAuthenticated(cookieValue),
+    configured: isAdminPasswordConfigured(),
+  });
 }
 
 export async function POST(request: NextRequest) {
   try {
     const { password } = await request.json();
-    const adminPassword = process.env.ADMIN_PASSWORD || "admin1234";
+    const adminPassword = process.env.ADMIN_PASSWORD;
+
+    if (!adminPassword) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Admin password is not configured",
+          code: "ADMIN_PASSWORD_NOT_CONFIGURED",
+        },
+        { status: 503 }
+      );
+    }
 
     if (password !== adminPassword) {
       return NextResponse.json(
@@ -35,7 +50,18 @@ export async function POST(request: NextRequest) {
     }
 
     const response = NextResponse.json({ success: true });
-    response.cookies.set(cookieName, getAdminSessionToken(), getCookieOptions());
+    const token = getAdminSessionToken();
+    if (!token) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Admin session could not be created",
+          code: "ADMIN_SESSION_NOT_CONFIGURED",
+        },
+        { status: 503 }
+      );
+    }
+    response.cookies.set(cookieName, token, getCookieOptions());
     return response;
   } catch (error) {
     console.error("Auth error:", error);
