@@ -15,13 +15,34 @@ export default function AdminPage() {
   const [editing, setEditing] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("settings");
 
-  // ตรวจสอบ session
+  // ตรวจสอบ auth จาก server เพื่อไม่พึ่ง sessionStorage อย่างเดียว
   useEffect(() => {
-    const auth = sessionStorage.getItem("admin_auth");
-    if (auth === "true") {
-      setAuthenticated(true);
-    }
-    setAuthLoading(false);
+    let mounted = true;
+
+    fetch("/admin/api/auth", { cache: "no-store" })
+      .then((res) => res.json())
+      .then((result) => {
+        if (!mounted) return;
+        const isAuthed = Boolean(result?.authenticated);
+        setAuthenticated(isAuthed);
+        if (isAuthed) {
+          sessionStorage.setItem("admin_auth", "true");
+        } else {
+          sessionStorage.removeItem("admin_auth");
+        }
+      })
+      .catch(() => {
+        if (!mounted) return;
+        setAuthenticated(false);
+        sessionStorage.removeItem("admin_auth");
+      })
+      .finally(() => {
+        if (mounted) setAuthLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   // โหลดข้อมูลหลังจาก login
@@ -67,9 +88,12 @@ export default function AdminPage() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem("admin_auth");
-    setAuthenticated(false);
-    setPassword("");
+    fetch("/admin/api/auth", { method: "DELETE" }).finally(() => {
+      sessionStorage.removeItem("admin_auth");
+      setAuthenticated(false);
+      setPassword("");
+      setData(null);
+    });
   };
 
   const handleEdit = (section: string, id: number, field: string, value: any) => {
@@ -178,6 +202,12 @@ export default function AdminPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
+      if (response.status === 401) {
+        sessionStorage.removeItem("admin_auth");
+        setAuthenticated(false);
+        alert("เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่");
+        return;
+      }
       const result = await response.json();
       if (result.success) alert("บันทึกข้อมูลเรียบร้อย!");
       else alert("บันทึกข้อมูลไม่สำเร็จ");

@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { Redis } from '@upstash/redis';
+import { getAdminCookieName, isAdminAuthenticated } from '@/lib/admin-auth';
 
 // Initialize Redis client only if environment variables are available
 const getRedisClient = () => {
@@ -58,7 +59,23 @@ const defaultData = {
   ],
 };
 
-export async function GET() {
+function unauthorizedResponse() {
+  return NextResponse.json(
+    { success: false, message: "Unauthorized" },
+    { status: 401 }
+  );
+}
+
+function isAuthorized(request: NextRequest) {
+  const cookieValue = request.cookies.get(getAdminCookieName())?.value;
+  return isAdminAuthenticated(cookieValue);
+}
+
+export async function GET(request: NextRequest) {
+  if (!isAuthorized(request)) {
+    return unauthorizedResponse();
+  }
+
   try {
     const redis = getRedisClient();
     
@@ -83,7 +100,11 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  if (!isAuthorized(request)) {
+    return unauthorizedResponse();
+  }
+
   try {
     const data = await request.json();
     const redis = getRedisClient();
