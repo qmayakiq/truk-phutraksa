@@ -94,8 +94,12 @@ export default function HeroSection({ data }: { data?: any }) {
             { id: 3, label: "ปีแห่งประสบการณ์", value: "10+" }
           ]).slice(0, 3).map((stat: any, index: number) => (
             <div key={stat.id || index}>
-              <div className="text-3xl sm:text-4xl font-bold text-gray-900 drop-shadow-lg">{stat.value}</div>
-              <div className="text-sm text-gray-800 mt-1 font-medium">{stat.label}</div>
+              <div className="text-3xl sm:text-4xl font-bold text-white drop-shadow-lg">
+                {stat.value}
+              </div>
+              <div className="text-sm text-white/85 mt-1 font-medium drop-shadow-md">
+                {stat.label}
+              </div>
             </div>
           ))}
         </div>
